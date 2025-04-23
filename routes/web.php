@@ -26,6 +26,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('superadmin/dashboard', [SuperAdminController::class, 'index'])->name('superadmin.dashboard');
     Route::get('user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
     Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
+    Route::get('getUser', [UserController::class, 'getUser'])->name('getUser');
 });
 
 // Route::middleware('auth')->group(function () {

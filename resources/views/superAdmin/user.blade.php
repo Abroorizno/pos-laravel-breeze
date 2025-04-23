@@ -11,14 +11,17 @@
                 <div class="p-6 text-gray-900">
                     <div class="mb-4 flex justify-between">
                         <h1 class="text-2xl font-bold mb-4">Role Management</h1>
-                        <button id="openAddRoleModal" class="bg-blue-500 text-black px-4 py-2 rounded">Add Role</button>
+                        <button id="openAddUserModal" class="bg-blue-500 text-black px-4 py-2 rounded">Add User</button>
                     </div>
                     <table class="table-auto w-full border-collapse border border-gray-300">
                         <thead class="bg-gray-500 text-white">
                             <tr>
                                 <th class="border border-gray-300 px-1 py-2">No.</th>
-                                <th class="border border-gray-300 px-4 py-2">Role Name</th>
-                                <th class="border border-gray-300 px-4 py-2">Description</th>
+                                <th class="border border-gray-300 px-4 py-2">Role</th>
+                                <th class="border border-gray-300 px-4 py-2">User Name</th>
+                                <th class="border border-gray-300 px-4 py-2">Email</th>
+                                <th class="border border-gray-300 px-4 py-2">Created At</th>
+                                <th class="border border-gray-300 px-4 py-2">Update At</th>
                                 <th class="border border-gray-300 px-4 py-2">Action</th>
                             </tr>
                         </thead>
@@ -26,15 +29,20 @@
                             @php
                                 $no = 1;
                             @endphp
-                            @foreach ($roles as $role)
+                            @foreach ($users as $user)
                                 <tr class="border-b border-gray-200">
                                     <td class="border border-gray-300 px-4 py-2 text-center">{{ $no++ }}.</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $role->name }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $role->description }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">{{ $user->name }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        {{ $user->role == 1 ? 'Super Admin' : ($user->role == 2 ? 'Admin' : 'User') }}
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">{{ $user->email }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">{{ $user->created_at }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">{{ $user->updated_at }}</td>
                                     <td class="border border-gray-300 px-2 py-2">
-                                        <button data-target="edit-role-{{ $role->id }}"
+                                        <button data-target="edit-user-{{ $user->id }}"
                                             class="bg-purple-700 text-black px-2 py-2">Edit</button>
-                                        <form action="{{ route('roles.destroy', $role->id) }}" method="POST"
+                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST"
                                             class="inline-block">
                                             @csrf
                                             @method('DELETE')
@@ -45,29 +53,42 @@
                                 </tr>
 
                                 <!-- Modal Edit Role -->
-                                <div id="edit-role-{{ $role->id }}"
+                                <div id="edit-user-{{ $user->id }}"
                                     class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-20 hidden">
                                     <div class="bg-white p-6 rounded shadow-lg w-full max-w-xl">
-                                        <h2 class="text-xl font-bold mb-4">Add New Role</h2>
+                                        <h2 class="text-xl font-bold mb-4">Add New User</h2>
 
-                                        <form action="{{ route('roles.update', $role->id) }}" method="POST">
+                                        <form action="{{ route('users.update', $user->id) }}" method="POST">
                                             @csrf
                                             @method('PUT')
                                             <div class="mb-4">
                                                 <label for="name"
-                                                    class="block text-sm font-medium text-gray-700">Role Name</label>
+                                                    class="block text-sm font-medium text-gray-700">User Name</label>
                                                 <input type="text" id="name" name="name"
                                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200"
-                                                    value="{{ $role->name }}" required>
+                                                    value="{{ $user->name }}" required>
                                             </div>
-
                                             <div class="mb-4">
-                                                <label for="description"
-                                                    class="block text-sm font-medium text-gray-700">Description</label>
-                                                <textarea id="description" name="desc" rows="3"
-                                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200" required>{{ $role->description }}</textarea>
+                                                <label for="name"
+                                                    class="block text-sm font-medium text-gray-700">Role</label>
+                                                <select id="role" name="role"
+                                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200"
+                                                    required>
+                                                    @foreach ($roles as $role)
+                                                        <option value="{{ $role->id }}"
+                                                            {{ $user->role == $role->id ? 'selected' : '' }}>
+                                                            {{ $role->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
                                             </div>
-
+                                            <div class="mb-4">
+                                                <label for="email"
+                                                    class="block text-sm font-medium text-gray-700">Email</label>
+                                                <input type="email" id="email" name="email"
+                                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200"
+                                                    value="{{ $user->email }}" required>
+                                            </div>
                                             <div class="flex justify-end space-x-2">
                                                 <button type="submit"
                                                     class="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700">
@@ -88,25 +109,42 @@
     </div>
 
     <!-- Modal Tambah Role -->
-    <div id="add-role" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-20 hidden">
+    <div id="add-user" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-20 hidden">
         <div class="bg-white p-6 rounded shadow-lg w-full max-w-xl">
             <h2 class="text-xl font-bold mb-4">Add New Role</h2>
 
-            <form action="{{ route('roles.store') }}" method="POST">
+            <form action="{{ route('users.store') }}" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700">Role Name</label>
+                    <label for="name" class="block text-sm font-medium text-gray-700">User Name</label>
                     <input type="text" id="name" name="name"
                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200"
-                        required>
+                        placeholder="Enter User Name" required>
                 </div>
-
                 <div class="mb-4">
-                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea id="description" name="desc" rows="3"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200" required></textarea>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Role</label>
+                    <select id="role" name="role"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200"
+                        required>
+                        @foreach ($roles as $role)
+                            <option value="{{ $role->id }}">
+                                {{ $role->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
-
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" name="email"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200"
+                        placeholder="Enter email address" required>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" name="password"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200"
+                        placeholder="Enter password" required>
+                </div>
                 <div class="flex justify-end space-x-2">
                     <button type="submit" class="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700">
                         Save
@@ -120,19 +158,19 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const openAddRoleBtn = document.getElementById('openAddRoleModal');
-            const modals = document.querySelectorAll('[id^="edit-role-"]');
+            const openAddUserBtn = document.getElementById('openAddUserModal');
+            const modals = document.querySelectorAll('[id^="edit-user-"]');
             const cancelBtns = document.querySelectorAll('#cancelDelete');
 
-            openAddRoleBtn?.addEventListener('click', () => {
-                const addRoleModal = document.getElementById('add-role');
+            openAddUserBtn?.addEventListener('click', () => {
+                const addRoleModal = document.getElementById('add-user');
                 addRoleModal.classList.remove('hidden');
                 addRoleModal.classList.add('flex');
             });
 
             modals.forEach(modal => {
-                const openEditRoleBtn = document.querySelector(`[data-target="${modal.id}"]`);
-                openEditRoleBtn?.addEventListener('click', () => {
+                const openEditUserBtn = document.querySelector(`[data-target="${modal.id}"]`);
+                openEditUserBtn?.addEventListener('click', () => {
                     modal.classList.remove('hidden');
                     modal.classList.add('flex');
                 });
@@ -164,13 +202,13 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const addRoleForm = document.querySelector('#add-role form');
+            const addRoleForm = document.querySelector('#add-user form');
 
             addRoleForm?.addEventListener('submit', function(e) {
                 e.preventDefault();
                 Swal.fire({
                     title: 'Success',
-                    text: 'Role Saved!',
+                    text: 'User Created!',
                     icon: 'success',
                     showConfirmButton: true,
                     confirmButtonText: 'OK',
@@ -203,7 +241,7 @@
                         if (result.isConfirmed) {
                             Swal.fire({
                                 title: 'Deleted!',
-                                text: 'The role has been deleted.',
+                                text: 'The user has been deleted.',
                                 icon: 'success',
                                 timer: 2000,
                                 showConfirmButton: false

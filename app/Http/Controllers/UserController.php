@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +14,20 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user.dashboard');
+        $title = 'User Management';
+        // $users = User::with('role')->get();
+        // $roles = Role::orderBy('id', 'desc')->get();
+
+        return view('user.dashboard', compact('title'));
+    }
+
+    public function getUser()
+    {
+        $title = 'User Management';
+        $users = User::with('role')->get();
+        $roles = Role::orderBy('id', 'desc')->get();
+
+        return view('superAdmin.user', compact('title', 'users', 'roles'));
     }
 
     /**
@@ -28,7 +43,21 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            // 'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => $request->role,
+        ];
+
+        User::create($data);
+        return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
     /**
@@ -52,7 +81,20 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $request->role,
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+
+        $user->update($data);
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
     /**
@@ -60,6 +102,9 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 }

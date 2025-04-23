@@ -32,6 +32,18 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate the request data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'desc' => 'required|string|max:255',
+        ]);
+
+        // Check if the role already exists
+        $existingRole = Role::where('name', $request->name)->first();
+
+        if ($existingRole) {
+            return redirect()->route('roles.index')->with('error', 'Role already exists.');
+        }
         $data = [
             'name' => $request->name,
             'description' => $request->desc,
@@ -62,7 +74,14 @@ class RoleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $role = Role::findOrFail($id);
+        $data = [
+            'name' => $request->name,
+            'description' => $request->desc,
+        ];
+
+        $role->update($data);
+        return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
     }
 
     /**
@@ -70,6 +89,8 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $role = Role::findOrFail($id);
+        $role->delete();
+        return redirect()->route('roles.index')->with('success', 'Role deleted successfully.');
     }
 }
