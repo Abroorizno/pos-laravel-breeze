@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -11,7 +12,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Role Management';
+        $roles = Role::all();
+
+        // Return the view with the roles data
+        return view('superAdmin.role', compact('title', 'roles'));
     }
 
     /**
@@ -27,7 +32,13 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = [
+            'name' => $request->name,
+            'description' => $request->desc,
+        ];
+
+        Role::create($data);
+        return redirect()->route('roles.index')->with('success', 'Role created successfully.');
     }
 
     /**
