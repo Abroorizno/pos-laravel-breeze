@@ -34,7 +34,7 @@
                                     <td class="border border-gray-300 px-4 py-2 text-center">{{ $no++ }}.</td>
                                     <td class="border border-gray-300 px-4 py-2">{{ $user->name }}</td>
                                     <td class="border border-gray-300 px-4 py-2">
-                                        {{ $user->role == 1 ? 'Super Admin' : ($user->role == 2 ? 'Admin' : 'User') }}
+                                        {{ $roles->firstWhere('id', $user->role)->name ?? 'Unknown' }}
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2">{{ $user->email }}</td>
                                     <td class="border border-gray-300 px-4 py-2">{{ $user->created_at }}</td>

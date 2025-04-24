@@ -15,7 +15,7 @@ class UserController extends Controller
     public function index()
     {
         $title = 'User Management';
-        // $users = User::with('role')->get();
+        $users = User::with('role')->get();
         // $roles = Role::orderBy('id', 'desc')->get();
 
         return view('user.dashboard', compact('title'));
@@ -57,7 +57,7 @@ class UserController extends Controller
         ];
 
         User::create($data);
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return redirect()->route('superAdmin.user')->with('success', 'User created successfully.');
     }
 
     /**
