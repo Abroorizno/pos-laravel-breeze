@@ -30,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('superadmin/dashboard', [SuperAdminController::class, 'index'])->name('superadmin.dashboard');
     Route::get('user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
     Route::resource('roles', RoleController::class);
-    Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class)->middleware('role:1');
     Route::resource('category', CategoriesController::class);
     Route::resource('products', ProductController::class);
 
