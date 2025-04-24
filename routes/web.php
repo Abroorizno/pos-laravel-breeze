@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\POSController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SuperAdminController;
@@ -27,7 +31,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
+    Route::resource('category', CategoriesController::class);
+    Route::resource('products', ProductController::class);
+
     Route::get('getUser', [UserController::class, 'getUser'])->name('getUser');
+
+    Route::get('pos', [ProductController::class, 'getProduct'])->name('pos.dashboard');
+    Route::post('pos', [OrderController::class, 'store'])->name('pos.store');
 });
 
 // Route::middleware('auth')->group(function () {
