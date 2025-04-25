@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\OrderDetails;
 use App\Models\Orders;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -54,6 +55,15 @@ class OrderController extends Controller
             ];
             OrderDetails::create($order);
         }
+
+        // Update product stock
+        foreach ($cartItems as $item) {
+            $product = Product::find($item['productId']);
+            if ($product) {
+                $product->decrement('product_stock', $item['qty']);
+            }
+        }
+        
         return redirect()->route('pos.dashboard')->with('success', 'Product created successfully.');
     }
 

@@ -11,7 +11,8 @@
                 <div class="p-6 text-gray-900">
                     <div class="mb-4 flex justify-between">
                         <h1 class="text-2xl font-bold mb-4">Role Management</h1>
-                        <button id="openAddRoleModal" class="bg-blue-500 text-black px-4 py-2 rounded">Add Role</button>
+                        <button id="openAddRoleModal"
+                            class="bg-sky-500/100 hover:bg-sky-500/50 text-white px-4 py-2 rounded">Add Role</button>
                     </div>
                     <table class="table-auto w-full border-collapse border border-gray-300">
                         <thead class="bg-gray-500 text-white">

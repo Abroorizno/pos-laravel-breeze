@@ -38,8 +38,29 @@
                         {{-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         </div> --}}
                     </div>
+                    <div class="flex justify-center mt-4 gap-4">
+                        <div class="mt-4 p-4 bg-blue-100 rounded-lg shadow-md">
+                            <h2 class="text-xl font-semibold mb-3">Total Registered Products</h2>
+                            <p class="text-2xl font-bold text-blue-600 mb-2">{{ \App\Models\Product::count() }}
+                            </p>
+                            <a href="/products" class="text-blue-500 hover:underline">View Products</a>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block text-blue-500"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                        <div class="mt-4 p-4 bg-blue-100 rounded-lg shadow-md">
+                            <p class="text-2xl font-bold text-blue-600 mb-2">
+                                {{ \App\Models\Product::withCount('orders')->orderBy('orders_count', 'desc')->first()->name ?? 'No Data' }}
+                            </p>
+                            <a href="/categories" class="text-blue-500 hover:underline">Best Selling Product</a>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block text-blue-500"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </x-app-layout>
