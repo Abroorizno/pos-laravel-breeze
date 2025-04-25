@@ -38,7 +38,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('user.dashboard');
         } elseif ($user->role == 3) {
             return redirect()->route('pos.dashboard');
-        } 
+        }
+        return redirect('/');
     }
 
 

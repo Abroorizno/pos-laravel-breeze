@@ -38,6 +38,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('pos', [ProductController::class, 'getProduct'])->name('pos.dashboard');
     Route::post('pos', [OrderController::class, 'store'])->name('pos.store');
+    Route::get('report', [OrderController::class, 'index'])->name('report');
+
+    Route::get('report-search', [OrderController::class, 'report'])->name('report-search');
+
+    Route::get('report-print/{id}', [OrderController::class, 'print'])->name('print');
 });
 
 // Route::middleware('auth')->group(function () {

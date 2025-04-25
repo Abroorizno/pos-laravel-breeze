@@ -22,11 +22,11 @@ class Orders extends Model
 
     public function orderDetails()
     {
-        return $this->hasMany(orderDetails::class, 'order_id', 'id');
+        return $this->hasOne(orderDetails::class, 'order_id', 'id');
     }
 
     public function product()
     {
-        return $this->hasMany(Product::class, 'id', 'product_id');
+        return $this->belongsTo(Product::class, 'id', 'product_id');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\OrderDetails;
 use App\Models\Orders;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -11,9 +12,40 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        // Filter by order code if provided
+        $orderCode = $request->input('order_code');
+        if ($orderCode) {
+            $orders = Orders::with('orderDetails.product')
+                ->where('order_code', 'like', '%' . $orderCode . '%')
+                ->get();
+        } else {
+            $orders = Orders::with('orderDetails.product')->get();
+        }
+
+        $orders = Orders::with('orderDetails.product')->get();
+
+        // return $orders;
+
+        return view('pos.report', compact('orders'));
+    }
+
+    public function report(Request $request)
+    {
+        $date = $request->input('start_date');
+
+        $orders = Orders::with(['orderDetails.product'])
+            ->when($date, function ($query, $date) {
+                return $query->whereDate('created_at', $date);
+            })
+            ->get();
+
+        if ($request->ajax()) {
+            return view('pos._orders_table', compact('orders'))->render();
+        }
+
+        return view('pos.report', compact('orders'));
     }
 
     /**
@@ -54,15 +86,26 @@ class OrderController extends Controller
             ];
             OrderDetails::create($order);
         }
+
+        // Update product stock
+        foreach ($cartItems as $item) {
+            $product = Product::find($item['productId']);
+            if ($product) {
+                $product->decrement('product_stock', $item['qty']);
+            }
+        }
+
         return redirect()->route('pos.dashboard')->with('success', 'Product created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $order = Orders::with('orderDetails.product')->findOrFail($id);
+
+        return view('pos.report', compact('order'));
     }
 
     /**
@@ -87,5 +130,20 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function print($id)
+    {
+        // $order = Order::find($id);
+        // $orderDetails = orderDetails::where('order_id', $id)->get();
+        // $resonse = [
+        //     'status' => 'success',
+        //     'message' => 'Data found',
+        //     'data' => $order,
+        //     'orderDetails' => $orderDetails
+        // ];
+        // return response()->json($resonse, 200);
+        $orders = Orders::with('orderDetails', 'category', 'product')->find($id);
+        return view('pos.print', compact('id', 'orders'));
     }
 }

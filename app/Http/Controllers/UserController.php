@@ -57,7 +57,7 @@ class UserController extends Controller
         ];
 
         User::create($data);
-        return redirect()->route('superAdmin.user')->with('success', 'User created successfully.');
+        return redirect()->route('getUser')->with('success', 'User created successfully.');
     }
 
     /**
@@ -94,7 +94,7 @@ class UserController extends Controller
         }
 
         $user->update($data);
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('getUser')->with('success', 'User updated successfully.');
     }
 
     /**
@@ -105,6 +105,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('getUser')->with('success', 'User deleted successfully.');
     }
 }

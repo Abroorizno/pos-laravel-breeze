@@ -11,7 +11,8 @@
                 <div class="p-6 text-gray-900">
                     <div class="mb-4 flex justify-between">
                         <h1 class="text-2xl font-bold mb-4">Role Management</h1>
-                        <button id="openAddRoleModal" class="bg-blue-500 text-black px-4 py-2 rounded">Add Role</button>
+                        <button id="openAddRoleModal"
+                            class="bg-sky-500/100 hover:bg-sky-500/50 text-white px-4 py-2 rounded">Add Role</button>
                     </div>
                     <table class="table-auto w-full border-collapse border border-gray-300">
                         <thead class="bg-gray-500 text-white">
@@ -33,12 +34,13 @@
                                     <td class="border border-gray-300 px-4 py-2">{{ $role->description }}</td>
                                     <td class="border border-gray-300 px-2 py-2">
                                         <button data-target="edit-role-{{ $role->id }}"
-                                            class="bg-purple-700 text-black px-2 py-2">Edit</button>
+                                            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition duration-200">Edit</button>
                                         <form action="{{ route('roles.destroy', $role->id) }}" method="POST"
                                             class="inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="bg-red-700 text-black px-2 py-2"
+                                            <button type="submit"
+                                                class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition duration-200"
                                                 id="delete">Delete</button>
                                         </form>
                                     </td>
@@ -70,11 +72,11 @@
 
                                             <div class="flex justify-end space-x-2">
                                                 <button type="submit"
-                                                    class="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700">
+                                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                                                     Save
                                                 </button>
                                                 <button type="button" id="cancelDelete"
-                                                    class="bg-gray-300 text-black px-4 py-2 rounded">Cancel</button>
+                                                    class="bg-gray-300 text-white px-4 py-2 rounded">Cancel</button>
                                             </div>
                                         </form>
                                     </div>
@@ -108,11 +110,11 @@
                 </div>
 
                 <div class="flex justify-end space-x-2">
-                    <button type="submit" class="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                         Save
                     </button>
                     <button type="button" id="cancelDelete"
-                        class="bg-gray-300 text-black px-4 py-2 rounded">Cancel</button>
+                        class="bg-gray-300 text-white px-4 py-2 rounded">Cancel</button>
                 </div>
             </form>
         </div>
