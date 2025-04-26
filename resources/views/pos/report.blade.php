@@ -27,74 +27,71 @@
                                         value="{{ request('end_date', \Carbon\Carbon::now()->format('Y-m-d')) }}"
                                         required>
                                 </div>
+                            </div>
+                            <div class="flex space-x-4 mt-4">
+                                <div class="w-1/3">
+                                    <label for="filter_type" class="block text-sm font-medium text-gray-700">Filter
+                                        Type</label>
+                                    <select id="filter_type"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200">
+                                        <option value="daily" selected>Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                    </select>
+                                </div>
                                 <div class="flex items-center mt-6">
                                     <button type="submit"
                                         class="bg-sky-500/100 hover:bg-sky-500/50 text-white px-4 py-2 rounded">Report</button>
                                 </div>
                             </div>
+
+                            {{-- <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const filterType = document.getElementById('filter_type');
+                                    const startDateInput = document.getElementById('start_date');
+                                    const endDateInput = document.getElementById('end_date');
+
+                                    // Set default values to today
+                                    const today = new Date();
+                                    startDateInput.value = today.toISOString().split('T')[0];
+                                    endDateInput.value = today.toISOString().split('T')[0];
+
+                                    filterType.addEventListener('change', function() {
+                                        let startDate;
+
+                                        if (this.value === 'daily') {
+                                            startDate = new Date(); // Create a new Date instance
+                                        } else if (this.value === 'weekly') {
+                                            const dayOfWeek = today.getDay();
+                                            startDate = new Date(); // Create a new Date instance
+                                            startDate.setDate(today.getDate() - dayOfWeek);
+                                        } else if (this.value === 'monthly') {
+                                            startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                                        }
+
+                                        if (startDate) {
+                                            startDateInput.value = startDate.toISOString().split('T')[0];
+                                        }
+                                        // Always set end date to today
+                                        endDateInput.value = today.toISOString().split('T')[0];
+                                    });
+                                });
+                            </script> --}}
                         </form>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- <div class="py-12">
-            <div class="max-w-full mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">
-                        <h2 class="text-xl font-bold mb-4">Search Results</h2>
-                        @if ($orders->isEmpty())
-                            <p class="text-gray-600">No orders found for the selected date range.</p>
-                        @else
-                            <table class="table-auto w-full border-collapse border border-gray-300">
-                                <thead class="bg-gray-500 text-white">
-                                    <tr>
-                                        <th class="border border-gray-300 px-4 py-2">No.</th>
-                                        <th class="border border-gray-300 px-4 py-2">Order Code</th>
-                                        <th class="border border-gray-300 px-4 py-2">Order Date</th>
-                                        <th class="border border-gray-300 px-4 py-2">Subtotal</th>
-                                        <th class="border border-gray-300 px-4 py-2">Amount</th>
-                                        <th class="border border-gray-300 px-4 py-2">Status</th>
-                                        <th class="border border-gray-300 px-4 py-2">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $no = 1;
-                                    @endphp
-                                    @foreach ($orders as $order)
-                                        <tr class="border-b border-gray-200">
-                                            <td class="border border-gray-300 px-4 py-2 text-center">{{ $no++ }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2">{{ $order->order_code }}</td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                {{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}</td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                Rp.{{ number_format($order->orderDetails->order_subtotal, 0, ',', '.') }}
-                                            </td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                Rp.{{ number_format($order->payment_amount, 0, ',', '.') }}</td>
-                                            <td class="border border-gray-300 px-4 py-2">
-                                                {{ $order->order_status == 1 ? 'Paid' : 'Unpaid' }}</td>
-                                            <td class="border border-gray-300 px-2 py-2 text-center">
-                                                <button data-target="details-order-{{ $order->id }}"
-                                                    class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition duration-200">Details</button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-
         <div class="py-12">
             <div class="max-w-full mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <h2 class="text-xl font-bold mb-4">Search Results</h2>
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold">Report Sales</h2>
+                            <button onclick="printTable()"
+                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Print</button>
+                        </div>
                         <table class="table-auto w-full border-collapse border border-gray-300">
                             <thead class="bg-gray-500 text-white">
                                 <tr>
@@ -103,6 +100,7 @@
                                     <th class="border border-gray-300 px-4 py-2">Order Date</th>
                                     <th class="border border-gray-300 px-4 py-2">Subtotal</th>
                                     <th class="border border-gray-300 px-4 py-2">Amount</th>
+                                    <th class="border border-gray-300 px-4 py-2">Change</th>
                                     <th class="border border-gray-300 px-4 py-2">Status</th>
                                     <th class="border border-gray-300 px-4 py-2">Action</th>
                                 </tr>
@@ -189,31 +187,7 @@
         @endforeach
 
 
-        <script>
-            // document.addEventListener('DOMContentLoaded', function() {
-            //     const form = document.querySelector('#reportForm');
-            //     const searchResultsTable = document.querySelector('table.table-auto tbody');
-
-            //     form.addEventListener('submit', function(e) {
-            //         e.preventDefault();
-
-            //         const startDate = document.querySelector('#start_date').value;
-            //         const endDate = document.querySelector('#end_date').value;
-
-            //         const url = form.action + '?start_date=' + startDate + '&end_date=' + endDate;
-
-            //         fetch(url)
-            //             .then(response => response.text())
-            //             .then(data => {
-            //                 searchResultsTable.innerHTML = data; // only replace <tbody> content
-            //                 console.log('Data fetched successfully');
-            //             })
-            //             .catch(error => {
-            //                 console.error('Error fetching data:', error);
-            //             });
-            //     });
-            // });
-
+        {{-- <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const form = document.querySelector('#reportForm');
                 const searchResultsTable = document.querySelector('#ordersTableBody');
@@ -228,6 +202,95 @@
                     fetch(url, {
                             headers: {
                                 'X-Requested-With': 'XMLHttpRequest' // penting agar `$request->ajax()` true
+                            }
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            searchResultsTable.innerHTML = data;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data:', error);
+                        });
+                });
+            });
+        </script> --}}
+        <script>
+            function printTable() {
+                const tableContent = document.querySelector('.table-auto').outerHTML;
+                const printWindow = window.open('', '_blank');
+                printWindow.document.open();
+                printWindow.document.write(`
+                                    <html>
+                                    <head>
+                                        <title>Print Table</title>
+                                        <style>
+                                        table {
+                                            width: 100%;
+                                            border-collapse: collapse;
+                                        }
+                                        th, td {
+                                            border: 1px solid #ddd;
+                                            padding: 8px;
+                                            text-align: left;
+                                        }
+                                        th {
+                                            background-color: #f4f4f4;
+                                        }
+                                        </style>
+                                    </head>
+                                    <body>
+                                        ${tableContent}
+                                    </body>
+                                    </html>
+                                `);
+                printWindow.document.close();
+                printWindow.print();
+            }
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.querySelector('#reportForm');
+                const searchResultsTable = document.querySelector('#ordersTableBody');
+                const filterType = document.getElementById('filter_type');
+                const startDateInput = document.getElementById('start_date');
+                const endDateInput = document.getElementById('end_date');
+
+                // Set default date (today) saat halaman dimuat
+                const today = new Date();
+                const todayStr = today.toISOString().split('T')[0];
+                startDateInput.value = todayStr;
+                endDateInput.value = todayStr;
+
+                // Event untuk filter (daily, weekly, monthly)
+                filterType.addEventListener('change', function() {
+                    let startDate = new Date(today); // Default clone today
+
+                    if (this.value === 'daily') {
+                        startDate = new Date(today);
+                    } else if (this.value === 'weekly') {
+                        const dayOfWeek = today.getDay(); // 0 (Minggu) sampai 6 (Sabtu)
+                        startDate.setDate(today.getDate() - dayOfWeek); // Set ke awal minggu
+                    } else if (this.value === 'monthly') {
+                        startDate = new Date(today.getFullYear(), today.getMonth(), 1); // Awal bulan
+                    }
+
+                    startDateInput.value = startDate.toISOString().split('T')[0];
+                    endDateInput.value = todayStr;
+                });
+
+                // Submit form pakai fetch
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const startDate = startDateInput.value;
+                    const endDate = endDateInput.value;
+                    const url = form.action + '?start_date=' + startDate + '&end_date=' + endDate;
+                    console.log('URL:', url);
+
+                    fetch(url, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
                             }
                         })
                         .then(response => response.text())
@@ -270,11 +333,6 @@
                 });
 
                 const cancelBtn = document.getElementById('cancelDelete');
-
-                // openBtn?.addEventListener('click', () => {
-                //     modal.classList.remove('hidden');
-                //     modal.classList.add('flex');
-                // });
 
                 cancelBtn?.addEventListener('click', () => {
                     modal.classList.add('hidden');

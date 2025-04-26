@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SuperAdminController extends Controller
 {
@@ -12,7 +14,17 @@ class SuperAdminController extends Controller
      */
     public function index()
     {
-        return view('superAdmin.dashboard');
+        $topProduct = DB::table('order_details')
+            ->select('product_id', DB::raw('SUM(qty) as total_qty'))
+            ->groupBy('product_id')
+            ->orderByDesc('total_qty')
+            ->first();
+
+        $product = $topProduct
+            ? Product::find($topProduct->product_id)
+            : null;
+
+        return view('superAdmin.dashboard', compact('product'));
     }
 
     /**

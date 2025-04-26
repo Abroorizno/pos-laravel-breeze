@@ -11,14 +11,16 @@
                 <div class="p-6 text-gray-900">
                     <div class="mb-4 flex justify-between">
                         <h1 class="text-2xl font-bold mb-4">Product Management</h1>
-                        <button id="openAddProductModal" class="bg-blue-500 text-black px-4 py-2 rounded">Add
-                            Product</button>
+                        @if (auth()->user()->role == 1)
+                            <button id="openAddProductModal"
+                                class="bg-sky-500/100 hover:bg-sky-500/50 text-white px-4 py-2 rounded">Add
+                                Product</button>
+                        @endif
                     </div>
                     <table class="table-auto w-full border-collapse border border-gray-300">
                         <thead class="bg-gray-500 text-white">
                             <tr>
                                 <th class="border border-gray-300 px-1 py-2">No.</th>
-                                <th class="border border-gray-300 px-4 py-2">ID</th>
                                 <th class="border border-gray-300 px-4 py-2">Photo</th>
                                 <th class="border border-gray-300 px-4 py-2">Product Name</th>
                                 <th class="border border-gray-300 px-4 py-2">Category Name</th>
@@ -26,8 +28,11 @@
                                 <th class="border border-gray-300 px-4 py-2">Price</th>
                                 <th class="border border-gray-300 px-4 py-2">Stock</th>
                                 <th class="border border-gray-300 px-4 py-2">Description</th>
+                                <th class="border border-gray-300 px-4 py-2">Status</th>
                                 <th class="border border-gray-300 px-4 py-2">Created At</th>
-                                <th class="border border-gray-300 px-4 py-2">Action</th>
+                                @if (auth()->user()->role == 1)
+                                    <th class="border border-gray-300 px-4 py-2">Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -37,7 +42,6 @@
                             @foreach ($products as $product)
                                 <tr class="border-b border-gray-200">
                                     <td class="border border-gray-300 px-4 py-2 text-center">{{ $no++ }}.</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $product->id }}</td>
                                     <td class="border border-gray-300 px-4 py-2">
                                         <img src="{{ asset('storage/' . $product->product_photo) }}" alt="Product Image"
                                             class="w-48 object-cover">
@@ -52,18 +56,26 @@
                                     <td class="border border-gray-300 px-4 py-2">{{ $product->product_stock }}</td>
                                     <td class="border border-gray-300 px-4 py-2">{{ $product->product_description }}
                                     </td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $product->created_at }}</td>
-                                    <td class="border border-gray-300 px-2 py-2">
-                                        <button data-target="edit-product-{{ $product->id }}"
-                                            class="bg-purple-700 text-black px-2 py-2">Edit</button>
-                                        <form action="{{ route('products.destroy', $product->id) }}" method="POST"
-                                            class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="bg-red-700 text-black px-2 py-2"
-                                                id="delete">Delete</button>
-                                        </form>
+                                    <td
+                                        class="border border-gray-300 px-4 py-2 {{ $product->product_stock == 0 ? 'bg-red-300' : 'bg-green-300' }}">
+                                        {{ $product->product_stock == 0 ? 'No Available' : 'Available' }}
                                     </td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        {{ $product->created_at->format('Y-m-d') }}</td>
+                                    @if (auth()->user()->role == 1)
+                                        <td class="border border-gray-300 px-2 py-2">
+                                            <button data-target="edit-product-{{ $product->id }}"
+                                                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition duration-200">Edit</button>
+                                            <form action="{{ route('products.destroy', $product->id) }}" method="POST"
+                                                class="inline-block">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition duration-200"
+                                                    id="delete">Delete</button>
+                                            </form>
+                                        </td>
+                                    @endif
                                 </tr>
 
                                 <!-- Modal Edit Role -->
@@ -147,11 +159,11 @@
                                             </div>
                                             <div class="flex justify-end space-x-2">
                                                 <button type="submit"
-                                                    class="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700">
+                                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                                                     Save
                                                 </button>
                                                 <button type="button" id="cancelDelete"
-                                                    class="bg-gray-300 text-black px-4 py-2 rounded">Cancel</button>
+                                                    class="bg-gray-300 text-white px-4 py-2 rounded">Cancel</button>
                                             </div>
                                         </form>
                                     </div>
@@ -226,11 +238,11 @@
                     </div>
                 </div>
                 <div class="flex justify-end space-x-2">
-                    <button type="submit" class="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                         Save
                     </button>
                     <button type="button" id="cancelDelete"
-                        class="bg-gray-300 text-black px-4 py-2 rounded">Cancel</button>
+                        class="bg-gray-300 text-white px-4 py-2 rounded">Cancel</button>
                 </div>
             </form>
         </div>

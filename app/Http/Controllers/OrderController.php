@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OrderDetails;
 use App\Models\Orders;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -34,12 +35,14 @@ class OrderController extends Controller
     public function report(Request $request)
     {
         $date = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-        $orders = Orders::with(['orderDetails.product'])
-            ->when($date, function ($query, $date) {
-                return $query->whereDate('created_at', $date);
-            })
-            ->get();
+        $start = Carbon::parse($date)->startOfDay(); // 00:00:00
+        $end = Carbon::parse($endDate)->endOfDay();       // 23:59:59
+
+        // $orders = Orders::whereBetween('created_at', [$start, $end])->get();
+        $orders = Orders::with('orderDetails.product')->whereBetween('created_at', [$start, $end])->get();
+
 
         if ($request->ajax()) {
             return view('pos._orders_table', compact('orders'))->render();
@@ -69,7 +72,7 @@ class OrderController extends Controller
         $cartItems = json_decode($request->cart, true);
 
         $orders = Orders::create([
-            'order_code' => $order_code,
+            'order_code' => $request->receiptNo,
             'order_mount' => $request->total,
             'order_change' => $request->change,
             'payment_amount' => $request->cash,
@@ -92,8 +95,18 @@ class OrderController extends Controller
             $product = Product::find($item['productId']);
             if ($product) {
                 $product->decrement('product_stock', $item['qty']);
+                if ($product->product_stock <= 0) {
+                    $product->update(['is_active' => 0]);
+                }
             }
         }
+
+        // foreach ($cartItems as $item) {
+        //     $product = Product::find($item['productId']);
+        //     if ($product) {
+        //         $product->decrement('product_stock', $item['qty']);
+        //     }
+        // }
 
         return redirect()->route('pos.dashboard')->with('success', 'Product created successfully.');
     }

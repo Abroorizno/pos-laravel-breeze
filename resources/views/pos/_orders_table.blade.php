@@ -18,6 +18,9 @@
                 Rp.{{ number_format($order->payment_amount, 0, ',', '.') }}
             </td>
             <td class="border border-gray-300 px-4 py-2">
+                Rp.{{ number_format($order->order_change, 0, ',', '.') }}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
                 {{ $order->order_status == 1 ? 'Paid' : 'Unpaid' }}
             </td>
             <td class="border border-gray-300 px-2 py-2 text-center">
@@ -26,4 +29,10 @@
             </td>
         </tr>
     @endforeach
+    <tr class="font-bold bg-gray-100">
+        <td colspan="3" class="border border-gray-300 px-4 py-2 text-right">Total Revenue :</td>
+        <td colspan="5" class="border border-gray-300 px-4 py-2">
+            Rp.{{ number_format($orders->sum(fn($order) => $order->orderDetails?->sum('order_subtotal') ?? 0), 0, ',', '.') }}
+        </td>
+    </tr>
 @endif

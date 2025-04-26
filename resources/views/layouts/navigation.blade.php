@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="#">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        <img src="{{ asset('images/a.png') }}" alt="Logo" class="block h-12 w-auto">
                     </a>
                 </div>
 
@@ -81,8 +81,14 @@
                     </div>
                 @elseif ($roleId == 2)
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        <x-nav-link :href="route('user.dashboard')" :active="request()->routeIs('dashboard')">
                             {{ __('Dashboard') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
+                            {{ __('Products') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('report')" :active="request()->routeIs('report')">
+                            {{ __('Report POS') }}
                         </x-nav-link>
                     </div>
                 @else

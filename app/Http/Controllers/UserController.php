@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -16,9 +18,17 @@ class UserController extends Controller
     {
         $title = 'User Management';
         $users = User::with('role')->get();
-        // $roles = Role::orderBy('id', 'desc')->get();
+        $topProduct = DB::table('order_details')
+            ->select('product_id', DB::raw('SUM(qty) as total_qty'))
+            ->groupBy('product_id')
+            ->orderByDesc('total_qty')
+            ->first();
 
-        return view('user.dashboard', compact('title'));
+        $product = $topProduct
+            ? Product::find($topProduct->product_id)
+            : null;
+
+        return view('user.dashboard', compact('title', 'product'));
     }
 
     public function getUser()
