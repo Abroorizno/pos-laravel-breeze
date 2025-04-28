@@ -270,7 +270,7 @@
                         startDate = new Date(today);
                     } else if (this.value === 'weekly') {
                         const dayOfWeek = today.getDay(); // 0 (Minggu) sampai 6 (Sabtu)
-                        startDate.setDate(today.getDate() - dayOfWeek); // Set ke awal minggu
+                        startDate.setDate(today.getDate() - dayOfWeek - 7); // Set ke awal minggu
                     } else if (this.value === 'monthly') {
                         startDate = new Date(today.getFullYear(), today.getMonth(), 1); // Awal bulan
                     }
