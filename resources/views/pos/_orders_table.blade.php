@@ -8,6 +8,8 @@
         <tr class="border-b border-gray-200">
             <td class="border border-gray-300 px-4 py-2 text-center">{{ $no++ }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ $order->order_code }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ $order->orderDetails->product->product_name }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ $order->orderDetails->qty }}</td>
             <td class="border border-gray-300 px-4 py-2">
                 {{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}
             </td>
@@ -30,9 +32,9 @@
         </tr>
     @endforeach
     <tr class="font-bold bg-gray-100">
-        <td colspan="3" class="border border-gray-300 px-4 py-2 text-right">Total Revenue :</td>
-        <td colspan="5" class="border border-gray-300 px-4 py-2">
-            Rp.{{ number_format($orders->sum(fn($order) => $order->orderDetails?->sum('order_subtotal') ?? 0), 0, ',', '.') }}
+        <td colspan="5" class="border border-gray-300 px-4 py-2 text-right">Total Revenue :</td>
+        <td colspan="6" class="border border-gray-300 px-4 py-2">
+            Rp.{{ number_format($orders->sum(fn($order) => $order->orderDetails->order_subtotal), 0, ',', '.') }}
         </td>
     </tr>
 @endif

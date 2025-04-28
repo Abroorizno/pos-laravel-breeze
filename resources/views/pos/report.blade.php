@@ -97,6 +97,8 @@
                                 <tr>
                                     <th class="border border-gray-300 px-4 py-2">No.</th>
                                     <th class="border border-gray-300 px-4 py-2">Order Code</th>
+                                    <th class="border border-gray-300 px-4 py-2">Product Name</th>
+                                    <th class="border border-gray-300 px-4 py-2">Qty</th>
                                     <th class="border border-gray-300 px-4 py-2">Order Date</th>
                                     <th class="border border-gray-300 px-4 py-2">Subtotal</th>
                                     <th class="border border-gray-300 px-4 py-2">Amount</th>
