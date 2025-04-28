@@ -36,6 +36,15 @@ class ProductController extends Controller
         return view('pos.index', compact('products'));
     }
 
+    public function addStock(Request $request, string $id)
+    {
+        $product = Product::findOrFail($id);
+        $product->product_stock += $request->stock;
+        $product->save();
+
+        return redirect()->route('products.index')->with('success', 'Stock updated successfully.');
+    }
+
     /**
      * Show the form for creating a new resource.
      */

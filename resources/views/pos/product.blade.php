@@ -15,6 +15,9 @@
                             <button id="openAddProductModal"
                                 class="bg-sky-500/100 hover:bg-sky-500/50 text-white px-4 py-2 rounded">Add
                                 Product</button>
+                        @elseif (auth()->user()->role == 3)
+                            <button onclick="window.history.back()"
+                                class="bg-sky-500/100 hover:bg-sky-500/50 text-white px-4 py-2 rounded">Back</button>
                         @endif
                     </div>
                     <table class="table-auto w-full border-collapse border border-gray-300">
@@ -53,7 +56,20 @@
                                     <td class="border border-gray-300 px-4 py-2">Rp.
                                         {{ number_format($product->product_price, 0, ',', '.') }}
                                     </td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $product->product_stock }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <div class="mt-2">{{ $product->product_stock }}</div>
+                                        @if (auth()->user()->role == 1 || auth()->user()->role == 3)
+                                            <form action="{{ route('addStock', $product->id) }}" method="POST"
+                                                class="flex items-center">
+                                                @csrf
+                                                <input type="number" name="stock" min="1"
+                                                    class="border border-gray-300 rounded-md p-1 w-16 mr-2"
+                                                    placeholder="Add" min="0">
+                                                <button type="submit"
+                                                    class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-700">Add</button>
+                                            </form>
+                                        @endif
+                                    </td>
                                     <td class="border border-gray-300 px-4 py-2">{{ $product->product_description }}
                                     </td>
                                     <td

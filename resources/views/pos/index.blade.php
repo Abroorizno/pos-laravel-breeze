@@ -47,7 +47,7 @@
                 </a>
                 <ul class="flex flex-col space-y-2 mt-12">
                     <li>
-                        <a href="#" class="flex items-center">
+                        <a href="/products" class="flex items-center">
                             <span class="flex items-center justify-center h-12 w-12 rounded-2xl"
                                 x-bind:class="{
                                     'hover:bg-cyan-400 text-cyan-100': activeMenu !== 'pos',

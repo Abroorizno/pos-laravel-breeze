@@ -25,10 +25,6 @@
             <td class="border border-gray-300 px-4 py-2">
                 {{ $order->order_status == 1 ? 'Paid' : 'Unpaid' }}
             </td>
-            <td class="border border-gray-300 px-2 py-2 text-center">
-                <button data-target="details-order-{{ $order->id }}"
-                    class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition duration-200">Details</button>
-            </td>
         </tr>
     @endforeach
     <tr class="font-bold bg-gray-100">

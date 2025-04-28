@@ -34,6 +34,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('category', CategoriesController::class);
     Route::resource('products', ProductController::class);
 
+    Route::post('/product/add-stock/{id}', [ProductController::class, 'addStock'])->name('addStock');
+
     Route::get('getUser', [UserController::class, 'getUser'])->name('getUser');
 
     Route::get('pos', [ProductController::class, 'getProduct'])->name('pos.dashboard');

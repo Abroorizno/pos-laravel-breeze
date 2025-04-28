@@ -89,8 +89,13 @@
                     <div class="p-6 text-gray-900">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-xl font-bold">Report Sales</h2>
-                            <button onclick="printTable()"
-                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Print</button>
+                            <div class="flex space-x-2">
+                                <button onclick="printTable()"
+                                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Print</button>
+                                <button onclick="exportToExcel()"
+                                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Export to
+                                    Excel</button>
+                            </div>
                         </div>
                         <table class="table-auto w-full border-collapse border border-gray-300">
                             <thead class="bg-gray-500 text-white">
@@ -104,7 +109,6 @@
                                     <th class="border border-gray-300 px-4 py-2">Amount</th>
                                     <th class="border border-gray-300 px-4 py-2">Change</th>
                                     <th class="border border-gray-300 px-4 py-2">Status</th>
-                                    <th class="border border-gray-300 px-4 py-2">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="ordersTableBody">
@@ -115,78 +119,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Modal Edit Role -->
-        @foreach ($orders as $order)
-            <div id="details-order-{{ $order->id }}"
-                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 hidden">
-                <div class="bg-white p-6 rounded shadow-lg w-full max-w-xl">
-                    <h2 class="text-xl font-bold mb-4">Order Details</h2>
-
-                    {{-- Order Info --}}
-                    <div class="mb-4 flex space-x-4">
-                        <div class="w-1/2">
-                            <label class="block text-sm font-medium text-gray-700">Order
-                                Code</label>
-                            <input type="text"
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200"
-                                value="{{ $order->order_code }}" readonly>
-                        </div>
-                        <div class="w-1/2">
-                            <label class="block text-sm font-medium text-gray-700">Order
-                                Date</label>
-                            <input type="text"
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-200"
-                                value="{{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}" readonly>
-                        </div>
-                    </div>
-
-                    {{-- Product Table --}}
-                    <h2 class="text-lg font-semibold mb-4">Product Details</h2>
-                    <table class="table-auto w-full border-collapse border border-gray-300 mb-4">
-                        <thead class="bg-gray-500 text-white">
-                            <tr>
-                                <th class="border px-4 py-2">Product</th>
-                                <th class="border px-4 py-2">Qty</th>
-                                <th class="border px-4 py-2">Subtotal</th>
-                                <th class="border px-4 py-2">Amount</th>
-                                <th class="border px-4 py-2">Change</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="border px-4 py-2">
-                                    {{ $order->orderDetails->product->product_name ?? 'N/A' }}
-                                </td>
-                                <td class="border px-4 py-2">
-                                    {{ $order->orderDetails->qty }}
-                                </td>
-                                <td class="border px-4 py-2">
-                                    Rp.{{ number_format($order->orderDetails->order_subtotal, 0, ',', '.') }}
-                                </td>
-                                <td class="border px-4 py-2">
-                                    Rp.{{ number_format($order->payment_amount, 0, ',', '.') }}
-                                </td>
-                                <td class="border px-4 py-2">
-                                    Rp.{{ number_format($order->order_change, 0, ',', '.') }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    {{-- Actions --}}
-                    <div class="flex justify-end space-x-2">
-                        <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                            Print
-                        </button>
-                        <button type="button" class="bg-gray-300 text-black px-4 py-2 rounded"
-                            onclick="document.getElementById('details-order-{{ $order->id }}').classList.add('hidden')">
-                            Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-        @endforeach
 
 
         {{-- <script>
@@ -216,6 +148,20 @@
                 });
             });
         </script> --}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+        <script>
+            function exportToExcel() {
+                const tableContent = document.querySelector('.table-auto');
+                const rows = Array.from(tableContent.rows).map(row =>
+                    Array.from(row.cells).map(cell => cell.innerText)
+                );
+                const worksheet = XLSX.utils.aoa_to_sheet(rows);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Report');
+                XLSX.writeFile(workbook, 'report.xlsx');
+            }
+        </script>
+
         <script>
             function printTable() {
                 const tableContent = document.querySelector('.table-auto').outerHTML;
