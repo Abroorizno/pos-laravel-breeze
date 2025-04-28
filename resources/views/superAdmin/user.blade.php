@@ -19,8 +19,8 @@
                         <thead class="bg-gray-500 text-white">
                             <tr>
                                 <th class="border border-gray-300 px-1 py-2">No.</th>
-                                <th class="border border-gray-300 px-4 py-2">Role</th>
                                 <th class="border border-gray-300 px-4 py-2">User Name</th>
+                                <th class="border border-gray-300 px-4 py-2">Role</th>
                                 <th class="border border-gray-300 px-4 py-2">Email</th>
                                 <th class="border border-gray-300 px-4 py-2">Created At</th>
                                 <th class="border border-gray-300 px-4 py-2">Update At</th>

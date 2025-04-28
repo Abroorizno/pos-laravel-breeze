@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderDetails;
 use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +30,10 @@ class UserController extends Controller
             ? Product::find($topProduct->product_id)
             : null;
 
-        return view('user.dashboard', compact('title', 'product'));
+        $todayOrderSubtotal = OrderDetails::whereDate('created_at', Carbon::today())
+            ->sum('order_subtotal');
+
+        return view('user.dashboard', compact('title', 'product', 'todayOrderSubtotal'));
     }
 
     public function getUser()

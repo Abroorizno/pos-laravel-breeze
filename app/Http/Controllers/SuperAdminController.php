@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderDetails;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +26,10 @@ class SuperAdminController extends Controller
             ? Product::find($topProduct->product_id)
             : null;
 
-        return view('superAdmin.dashboard', compact('product'));
+        $todayOrderSubtotal = OrderDetails::whereDate('created_at', Carbon::today())
+            ->sum('order_subtotal');
+
+        return view('superAdmin.dashboard', compact('product', 'todayOrderSubtotal'));
     }
 
     /**
