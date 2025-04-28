@@ -24,12 +24,12 @@
 
         <!-- Role User -->
         <div class="mt-4">
-            <x-input-label for="email" :value="__('Role')" />
+            <x-input-label for="role" :value="__('Role')" />
             <select id="role" name="role"
                 class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 w-full"
                 required>
+                <option value="#" selected disabled>- Select Role -</option>
                 @foreach (Role::all() as $role)
-                    <option value="#" selected disabled>- Select Role -</option>
                     <option value="{{ $role->id }}">{{ $role->name }}</option>
                 @endforeach
             </select>

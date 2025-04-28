@@ -97,6 +97,8 @@
                                 <tr>
                                     <th class="border border-gray-300 px-4 py-2">No.</th>
                                     <th class="border border-gray-300 px-4 py-2">Order Code</th>
+                                    <th class="border border-gray-300 px-4 py-2">Product Name</th>
+                                    <th class="border border-gray-300 px-4 py-2">Qty</th>
                                     <th class="border border-gray-300 px-4 py-2">Order Date</th>
                                     <th class="border border-gray-300 px-4 py-2">Subtotal</th>
                                     <th class="border border-gray-300 px-4 py-2">Amount</th>
@@ -270,7 +272,7 @@
                         startDate = new Date(today);
                     } else if (this.value === 'weekly') {
                         const dayOfWeek = today.getDay(); // 0 (Minggu) sampai 6 (Sabtu)
-                        startDate.setDate(today.getDate() - dayOfWeek); // Set ke awal minggu
+                        startDate.setDate(today.getDate() - dayOfWeek - 7); // Set ke awal minggu
                     } else if (this.value === 'monthly') {
                         startDate = new Date(today.getFullYear(), today.getMonth(), 1); // Awal bulan
                     }
