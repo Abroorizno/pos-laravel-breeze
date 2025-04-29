@@ -20,74 +20,102 @@
                                 class="bg-sky-500/100 hover:bg-sky-500/50 text-white px-4 py-2 rounded">Back</button>
                         @endif
                     </div>
-                    <table class="table-auto w-full border-collapse border border-gray-300">
-                        <thead class="bg-gray-500 text-white">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <th class="border border-gray-300 px-1 py-2">No.</th>
-                                <th class="border border-gray-300 px-4 py-2">Photo</th>
-                                <th class="border border-gray-300 px-4 py-2">Product Name</th>
-                                <th class="border border-gray-300 px-4 py-2">Category Name</th>
-                                <th class="border border-gray-300 px-4 py-2">Product Code</th>
-                                <th class="border border-gray-300 px-4 py-2">Price</th>
-                                <th class="border border-gray-300 px-4 py-2">Stock</th>
-                                <th class="border border-gray-300 px-4 py-2">Description</th>
-                                <th class="border border-gray-300 px-4 py-2">Status</th>
-                                <th class="border border-gray-300 px-4 py-2">Created At</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    No.</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Photo</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Product Name</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Category Name</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Product Code</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Price</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Stock</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Description</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Created At</th>
                                 @if (auth()->user()->role == 1)
-                                    <th class="border border-gray-300 px-4 py-2">Action</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Action</th>
                                 @endif
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             @php
                                 $no = 1;
                             @endphp
                             @foreach ($products as $product)
-                                <tr class="border-b border-gray-200">
-                                    <td class="border border-gray-300 px-4 py-2 text-center">{{ $no++ }}.</td>
-                                    <td class="border border-gray-300 px-4 py-2">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $no++ }}.
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <img src="{{ asset('storage/' . $product->product_photo) }}" alt="Product Image"
-                                            class="w-48 object-cover">
+                                            class="w-24 h-24 object-cover rounded-md">
                                     </td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $product->product_name }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $product->category->name_category }}
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $product->product_name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $product->category->name_category }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $product->product_code }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        Rp. {{ number_format($product->product_price, 0, ',', '.') }}
                                     </td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $product->product_code }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">Rp.
-                                        {{ number_format($product->product_price, 0, ',', '.') }}
-                                    </td>
-                                    <td class="border border-gray-300 px-4 py-2">
-                                        <div class="mt-2">{{ $product->product_stock }}</div>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <div>{{ $product->product_stock }}</div>
                                         @if (auth()->user()->role == 1 || auth()->user()->role == 3)
                                             <form action="{{ route('addStock', $product->id) }}" method="POST"
-                                                class="flex items-center">
+                                                class="flex items-center mt-2">
                                                 @csrf
                                                 <input type="number" name="stock" min="1"
                                                     class="border border-gray-300 rounded-md p-1 w-16 mr-2"
-                                                    placeholder="Add" min="0">
+                                                    placeholder="Add">
                                                 <button type="submit"
-                                                    class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-700">Add</button>
+                                                    class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-700 transition duration-200">Add</button>
                                             </form>
                                         @endif
                                     </td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $product->product_description }}
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $product->product_description }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                        {{ $product->product_stock == 0 ? 'bg-red-200 text-red-800' : 'bg-green-200 text-green-800' }}">
+                                            {{ $product->product_stock == 0 ? 'No Available' : 'Available' }}
+                                        </span>
                                     </td>
-                                    <td
-                                        class="border border-gray-300 px-4 py-2 {{ $product->product_stock == 0 ? 'bg-red-300' : 'bg-green-300' }}">
-                                        {{ $product->product_stock == 0 ? 'No Available' : 'Available' }}
-                                    </td>
-                                    <td class="border border-gray-300 px-4 py-2">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {{ $product->created_at->format('Y-m-d') }}</td>
                                     @if (auth()->user()->role == 1)
-                                        <td class="border border-gray-300 px-2 py-2">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                             <button data-target="edit-product-{{ $product->id }}"
-                                                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition duration-200">Edit</button>
+                                                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">Edit</button>
                                             <form action="{{ route('products.destroy', $product->id) }}" method="POST"
                                                 class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                    class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition duration-200"
+                                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition duration-200"
                                                     id="delete">Delete</button>
                                             </form>
                                         </td>

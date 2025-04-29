@@ -8,20 +8,32 @@
         <tr class="border-b border-gray-200">
             <td class="border border-gray-300 px-4 py-2 text-center">{{ $no++ }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ $order->order_code }}</td>
-            <td class="border border-gray-300 px-4 py-2">{{ $order->orderDetails->product->product_name }}</td>
-            <td class="border border-gray-300 px-4 py-2">{{ $order->orderDetails->qty }}</td>
+
+            {{-- Pastikan orderDetails dan product tersedia --}}
             <td class="border border-gray-300 px-4 py-2">
-                {{ \Carbon\Carbon::parse($order->created_at)->format('d-m-Y') }}
+                {{ $order->orderDetails->product->product_name ?? '-' }}
             </td>
+
             <td class="border border-gray-300 px-4 py-2">
-                Rp.{{ number_format($order->orderDetails->order_subtotal, 0, ',', '.') }}
+                {{ $order->orderDetails->qty ?? '-' }}
             </td>
+
             <td class="border border-gray-300 px-4 py-2">
-                Rp.{{ number_format($order->payment_amount, 0, ',', '.') }}
+                {{ optional($order->created_at)->format('d-m-Y') }}
             </td>
+
             <td class="border border-gray-300 px-4 py-2">
-                Rp.{{ number_format($order->order_change, 0, ',', '.') }}
+                Rp.{{ number_format($order->orderDetails->order_subtotal ?? 0, 0, ',', '.') }}
             </td>
+
+            <td class="border border-gray-300 px-4 py-2">
+                Rp.{{ number_format($order->payment_amount ?? 0, 0, ',', '.') }}
+            </td>
+
+            <td class="border border-gray-300 px-4 py-2">
+                Rp.{{ number_format($order->order_change ?? 0, 0, ',', '.') }}
+            </td>
+
             <td class="border border-gray-300 px-4 py-2">
                 {{ $order->order_status == 1 ? 'Paid' : 'Unpaid' }}
             </td>
@@ -30,7 +42,7 @@
     <tr class="font-bold bg-gray-100">
         <td colspan="5" class="border border-gray-300 px-4 py-2 text-right">Total Revenue :</td>
         <td colspan="6" class="border border-gray-300 px-4 py-2">
-            Rp.{{ number_format($orders->sum(fn($order) => $order->orderDetails->order_subtotal), 0, ',', '.') }}
+            Rp.{{ number_format($orders->sum(fn($order) => optional($order->orderDetails)->order_subtotal ?? 0), 0, ',', '.') }}
         </td>
     </tr>
 @endif

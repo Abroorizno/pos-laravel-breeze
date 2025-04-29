@@ -10,46 +10,65 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="mb-4 flex justify-between">
-                        <h1 class="text-2xl font-bold mb-4">Role Management</h1>
+                        <h1 class="text-2xl font-bold mb-4">Users Management</h1>
                         <button id="openAddUserModal"
                             class="bg-sky-500/100 hover:bg-sky-500/50 text-white px-4 py-2 rounded">Add
                             User</button>
                     </div>
-                    <table class="table-auto w-full border-collapse border border-gray-300">
-                        <thead class="bg-gray-500 text-white">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <th class="border border-gray-300 px-1 py-2">No.</th>
-                                <th class="border border-gray-300 px-4 py-2">User Name</th>
-                                <th class="border border-gray-300 px-4 py-2">Role</th>
-                                <th class="border border-gray-300 px-4 py-2">Email</th>
-                                <th class="border border-gray-300 px-4 py-2">Created At</th>
-                                <th class="border border-gray-300 px-4 py-2">Update At</th>
-                                <th class="border border-gray-300 px-4 py-2">Action</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    No.</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    User Name</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Role</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Email</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Created At</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Updated At</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             @php
                                 $no = 1;
                             @endphp
                             @foreach ($users as $user)
-                                <tr class="border-b border-gray-200">
-                                    <td class="border border-gray-300 px-4 py-2 text-center">{{ $no++ }}.</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $user->name }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $no++ }}.
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $user->name }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {{ $roles->firstWhere('id', $user->role)->name ?? 'Unknown' }}
                                     </td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $user->email }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $user->created_at }}</td>
-                                    <td class="border border-gray-300 px-4 py-2">{{ $user->updated_at }}</td>
-                                    <td class="border border-gray-300 px-2 py-2">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $user->email }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $user->created_at->format('Y-m-d') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $user->updated_at->format('Y-m-d') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                         <button data-target="edit-user-{{ $user->id }}"
-                                            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition duration-200">Edit</button>
+                                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">Edit</button>
                                         <form action="{{ route('users.destroy', $user->id) }}" method="POST"
                                             class="inline-block">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition duration-200"
+                                                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition duration-200"
                                                 id="delete">Delete</button>
                                         </form>
                                     </td>

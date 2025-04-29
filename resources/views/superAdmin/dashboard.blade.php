@@ -112,7 +112,7 @@
                         <h3 class="text-lg font-semibold text-gray-800">Sales Overview</h3>
                         <div class="flex space-x-2">
                             <button id="dailyBtn"
-                                class="px-3 py-1 text-xs bg-indigo-100 text-indigo-600 rounded-full">Daily</button>
+                                class="px-3 py-1 text-xs bg-indigo-100 text-indigo-600 rounded-full active-btn">Daily</button>
                             <button id="weeklyBtn"
                                 class="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">Weekly</button>
                             <button id="monthlyBtn"
@@ -129,6 +129,23 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        //color button click
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('#dailyBtn, #weeklyBtn, #monthlyBtn');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    buttons.forEach(btn => {
+                        btn.classList.remove('bg-indigo-100', 'text-indigo-600',
+                            'active-btn');
+                        btn.classList.add('bg-gray-100', 'text-gray-600');
+                    });
+                    this.classList.remove('bg-gray-100', 'text-gray-600');
+                    this.classList.add('bg-indigo-100', 'text-indigo-600', 'active-btn');
+                });
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const salesCtx = document.getElementById('salesChart').getContext('2d');
 
